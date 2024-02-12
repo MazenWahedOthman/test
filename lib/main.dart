@@ -38,7 +38,8 @@ class MyTask extends StatelessWidget {
             title: 'Task',
             translations: LocaleApp(),
             locale: localeController.localeApp,
-            initialRoute: Screens.signIn,
+            initialRoute:
+                settingService.isAuth ? Screens.addTrip : Screens.signIn,
             theme: ThemeApp.themeLight,
             getPages: RouterApp.getPages,
           ),
