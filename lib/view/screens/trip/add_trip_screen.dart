@@ -24,6 +24,7 @@ class AddTripScreen extends StatelessWidget {
                 () => GoogleMap(
                   scrollGesturesEnabled: true,
                   myLocationEnabled: true,
+                  myLocationButtonEnabled: true,
                   onTap: addTripController.onTapMap,
                   zoomControlsEnabled: false,
                   polylines:

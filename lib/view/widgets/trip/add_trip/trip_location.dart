@@ -24,63 +24,69 @@ class TripLocation extends StatelessWidget {
       padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 15.h),
       child: Column(
         children: [
-          InputLocation(
-            hintText: "Start Location",
-            icon: Icon(
-              FluentIcons.location_20_filled,
-              color: textColor,
-              size: 30.sp,
-            ),
-            suffixIcon: Obx(
-              () => addTripController.isSelectStartLocation.value
-                  ? MyIconButton(
-                      onPressed: addTripController.onDeleteStartLocation,
-                      icon: Icon(
-                        Icons.close,
+          SizedBox(
+            height: 52.h,
+            child: InputLocation(
+              hintText: "Start",
+              icon: Icon(
+                FluentIcons.location_20_filled,
+                color: textColor,
+                size: 30.sp,
+              ),
+              suffixIcon: Obx(
+                () => addTripController.isSelectStartLocation.value
+                    ? MyIconButton(
+                        onPressed: addTripController.onDeleteStartLocation,
+                        icon: Icon(
+                          Icons.close,
+                          color: Colors.red,
+                          size: 20.sp,
+                        ),
+                      )
+                    : Icon(
+                        Icons.arrow_back,
                         color: Colors.red,
                         size: 20.sp,
                       ),
-                    )
-                  : Icon(
-                      Icons.arrow_back,
-                      color: Colors.red,
-                      size: 20.sp,
-                    ),
-            ),
-            controller: addTripController.startLocationController,
-            onSave: (address) => addTripController.getLatLngFromAddress(
-              isStart: true,
-              locationName: address,
+              ),
+              controller: addTripController.startLocationController,
+              onSave: (address) => addTripController.getLatLngFromAddress(
+                isStart: true,
+                locationName: address,
+              ),
             ),
           ),
           SizedBox(height: 15.h),
-          InputLocation(
-            hintText: "End Location",
-            icon: Icon(
-              FluentIcons.location_target_square_20_regular,
-              color: textColor,
-              size: 30.sp,
-            ),
-            suffixIcon: Obx(
-              () => addTripController.isSelectEndLocation.value
-                  ? MyIconButton(
-                      onPressed: addTripController.onDeleteEndLocation,
-                      icon: Icon(
-                        Icons.close,
+          SizedBox(
+            height: 52.h,
+            child: InputLocation(
+              hintText: "Destination",
+              icon: Icon(
+                FluentIcons.location_target_square_20_regular,
+                color: textColor,
+                size: 30.sp,
+              ),
+              suffixIcon: Obx(
+                () => addTripController.isSelectEndLocation.value
+                    ? MyIconButton(
+                        onPressed: addTripController.onDeleteEndLocation,
+                        icon: Icon(
+                          Icons.close,
+                          color: Colors.blue,
+                          size: 20.sp,
+                        ),
+                      )
+                    : Icon(
+                        Icons.arrow_forward,
                         color: Colors.blue,
                         size: 20.sp,
                       ),
-                    )
-                  : Icon(
-                      Icons.arrow_forward,
-                      color: Colors.blue,
-                      size: 20.sp,
-                    ),
-            ),
-            controller: addTripController.endLocationController,
-               onSave: (address) => addTripController.getLatLngFromAddress(
-              isStart: false,
-              locationName: address,
+              ),
+              controller: addTripController.endLocationController,
+                 onSave: (address) => addTripController.getLatLngFromAddress(
+                isStart: false,
+                locationName: address,
+              ),
             ),
           ),
         ],

@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_polyline_points/flutter_polyline_points.dart';
 import 'package:geocoding/geocoding.dart';
@@ -25,6 +27,12 @@ class AddTripController extends GetxController {
 
   RxList<Marker> markers = <Marker>[].obs;
 
+  PolylinePoints polylinePoints = PolylinePoints();
+
+  RxMap<PolylineId, Polyline> polylineMap = <PolylineId, Polyline>{}.obs;
+
+  final List<LatLng> routePoints = [];
+
   final RxDouble currentLat = 25.2048.obs;
   final RxDouble currentLong = 55.2708.obs;
 
@@ -39,12 +47,6 @@ class AddTripController extends GetxController {
   late String startTime;
   late String endTime;
   late String duration;
-
-  PolylinePoints polylinePoints = PolylinePoints();
-
-  RxMap<PolylineId, Polyline> polylineMap = <PolylineId, Polyline>{}.obs;
-
-  final List<LatLng> routePoints = [];
 
   @override
   void onInit() {
@@ -133,7 +135,7 @@ class AddTripController extends GetxController {
           await placemarkFromCoordinates(latLng.latitude, latLng.longitude);
 
       if (placemarks.isNotEmpty) {
-        Placemark placemark = placemarks[0];
+        Placemark placemark = placemarks.first;
         String city = placemark.locality ?? '';
         String street = placemark.street ?? '';
 
@@ -156,7 +158,7 @@ class AddTripController extends GetxController {
           await locationFromAddress(locationName).catchError(handleError);
       Get.context!.loaderOverlay.hide();
       if (locations.isNotEmpty) {
-        Location location = locations[0];
+        Location location = locations.first;
         final LatLng latLng = LatLng(location.latitude, location.longitude);
 
         if (isStart) {
@@ -230,23 +232,24 @@ class AddTripController extends GetxController {
   }
 
   Future<void> getDirection() async {
-    List<LatLng> polylineCoordinates = [];
+    try {
+      List<LatLng> polylineCoordinates = [];
 
-    PolylineResult result = await polylinePoints
-        .getRouteBetweenCoordinates(
-          apiKey,
-          PointLatLng(orgin!.latitude, orgin!.longitude),
-          PointLatLng(destination!.latitude, destination!.longitude),
-          travelMode: TravelMode.driving,
-        )
-        .catchError(handleError);
-
-    if (result.points.isNotEmpty) {
-      for (final point in result.points) {
-        polylineCoordinates.add(LatLng(point.latitude, point.longitude));
-        routePoints.add(LatLng(point.latitude, point.longitude));
+      PolylineResult result = await polylinePoints.getRouteBetweenCoordinates(
+        apiKey,
+        PointLatLng(orgin!.latitude, orgin!.longitude),
+        PointLatLng(destination!.latitude, destination!.longitude),
+        travelMode: TravelMode.driving,
+      );
+      if (result.points.isNotEmpty) {
+        for (final point in result.points) {
+          polylineCoordinates.add(LatLng(point.latitude, point.longitude));
+          routePoints.add(LatLng(point.latitude, point.longitude));
+        }
+        addPolyLine(polylineCoordinates);
       }
-      addPolyLine(polylineCoordinates);
+    } catch (error) {
+      handleError(error);
     }
   }
 
@@ -328,6 +331,7 @@ class AddTripController extends GetxController {
   }
 
   dynamic handleError(error) {
+    log(error.toString());
     AppSnackBar.showSnackBar(
       message: "An error occurred. Please try again later.",
       backgroundColor: Colors.red,

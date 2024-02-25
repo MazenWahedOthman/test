@@ -12,9 +12,9 @@ class Distance {
     String distance = "";
     final List routesList = map['routes'] ?? [];
     if (routesList.isNotEmpty) {
-      final List legsList = (routesList[0])['legs'] ?? [];
+      final List legsList = (routesList.first)['legs'] ?? [];
       if (legsList.isNotEmpty) {
-        distance = legsList[0]['distance']?['text'] ?? "";
+        distance = (legsList.first)['distance']?['text'] ?? "";
       }
     }
     return Distance(text: distance);
