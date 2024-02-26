@@ -11,4 +11,4 @@ const String assetsLotties = "assets/lotties";
 
 //The API key for getting the distance and drawing the path is private,
 // and I cannot provide you with this key
-const String apiKey = "AIzaSyAnz0_s_6zxo8EnNF47boCE0NBvB4BjKds";
+const String apiKey = "";
