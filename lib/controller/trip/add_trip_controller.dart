@@ -82,6 +82,10 @@ class AddTripController extends GetxController {
     }
   }
 
+  Future<void> onCameraMove(CameraPosition cameraPosition)async{
+
+  }
+
   Future<void> addStartMarker(LatLng latLng) async {
     Get.context!.loaderOverlay.show();
     final String? locationName =

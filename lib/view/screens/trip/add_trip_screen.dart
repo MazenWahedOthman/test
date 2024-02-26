@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
@@ -17,37 +18,58 @@ class AddTripScreen extends StatelessWidget {
       body: SafeArea(
         child: GestureDetector(
           onTap: () => FocusScope.of(context).requestFocus(FocusNode()),
-          child: Stack(
-            alignment: Alignment.topCenter,
+        
+          child: Column(
             children: [
-              Obx(
-                () => GoogleMap(
-                  scrollGesturesEnabled: true,
-                  myLocationEnabled: true,
-                  myLocationButtonEnabled: true,
-                  onTap: addTripController.onTapMap,
-                  zoomControlsEnabled: false,
-                  polylines:
-                      Set<Polyline>.of(addTripController.polylineMap.values),
-                  markers: addTripController.markers.toSet(),
-                  onMapCreated: (controller) =>
-                      addTripController.onMapCreated(controller),
-                  initialCameraPosition: CameraPosition(
-                    target: LatLng(
-                      addTripController.currentLat.value,
-                      addTripController.currentLong.value,
+              Expanded(
+                child: Stack(
+                  alignment: Alignment.topCenter,
+                  children: [
+                    Obx(
+                      () => GoogleMap(
+                        scrollGesturesEnabled: true,
+                        onTap: addTripController.onTapMap,
+                        onCameraMove:addTripController.onCameraMove,
+                        zoomControlsEnabled: false,
+                        polylines:
+                            Set<Polyline>.of(addTripController.polylineMap.values),
+                        markers: addTripController.markers.toSet(),
+                        onMapCreated: (controller) =>
+                            addTripController.onMapCreated(controller),
+                        initialCameraPosition: CameraPosition(
+                          target: LatLng(
+                            addTripController.currentLat.value,
+                            addTripController.currentLong.value,
+                          ),
+                          zoom: 15,
+                        ),
+                      ),
                     ),
-                    zoom: 15,
-                  ),
+                    // TripLocation(),
+                  ],
                 ),
               ),
-              TripLocation(),
             ],
           ),
         ),
       ),
-      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
-      floatingActionButton: FloatingActionStartTrip(),
+
+  
+floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
+      floatingActionButton: SizedBox(
+        height: 150,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.end,
+          children: [
+            FloatingActionButton(onPressed:addTripController.getCurrentLocation,
+              child: const Icon(Icons.my_location,),),
+              SizedBox(height: 10.h,),
+              FloatingActionStartTrip(),
+          ],
+        ),
+      ),
+    
+      
     );
   }
 }

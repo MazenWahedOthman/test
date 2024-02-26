@@ -12,9 +12,7 @@ class FloatingActionStartTrip extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Obx(
-      () => addTripController.canStartTrip.value
-          ? TweenAnimationBuilder<double>(
+    return TweenAnimationBuilder<double>(
               duration: const Duration(milliseconds: 600),
               curve: Curves.easeInOut,
               tween: Tween(begin: 1.0, end: 0.0),
@@ -49,8 +47,8 @@ class FloatingActionStartTrip extends StatelessWidget {
                   onPress: addTripController.onTapStartTrip,
                 ),
               ),
-            )
-          : const SizedBox.shrink(),
-    );
+            );
+          
+  
   }
 }
